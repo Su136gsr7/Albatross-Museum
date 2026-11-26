@@ -1,50 +1,24 @@
 import React from 'react';
-import { Environment, Lightformer } from '@react-three/drei';
 
 interface MuseumEnvironmentProps {
   intensity?: number;
 }
 
 /**
- * Self-contained procedural HDRI environment using Lightformers.
- * Avoids external CDN fetches so 3D PBR reflections work 100% offline in PWA/Capacitor.
+ * Lightweight analytical bounce lighting replacement for PMREM <Environment>.
+ * Avoids HalfFloat cube-map green tint bugs on Android mobile GPUs and boosts WebGL FPS.
  */
-export const MuseumEnvironment: React.FC<MuseumEnvironmentProps> = ({ intensity = 0.45 }) => {
+export const MuseumEnvironment: React.FC<MuseumEnvironmentProps> = ({ intensity = 0.5 }) => {
   return (
-    <Environment resolution={256} frames={1} environmentIntensity={intensity}>
-      <color attach="background" args={['#1a120d']} />
-      <Lightformer
-        form="rect"
-        intensity={2.2}
-        color="#ffe8c2"
-        position={[0, 6, 2]}
-        rotation={[Math.PI / 2, 0, 0]}
-        scale={[10, 10, 1]}
+    <>
+      <hemisphereLight
+        args={['#fff0d8', '#4b3628', Math.max(0.45, intensity * 1.15)]}
       />
-      <Lightformer
-        form="circle"
-        intensity={1.6}
-        color="#ffd499"
-        position={[5, 3, 4]}
-        rotation={[0, -Math.PI / 4, 0]}
-        scale={4}
+      <directionalLight
+        position={[-10, 14, -14]}
+        intensity={Math.max(0.35, intensity * 0.85)}
+        color="#ffe3be"
       />
-      <Lightformer
-        form="circle"
-        intensity={1.1}
-        color="#fff0dc"
-        position={[-5, 2.5, 3]}
-        rotation={[0, Math.PI / 4, 0]}
-        scale={4}
-      />
-      <Lightformer
-        form="rect"
-        intensity={0.7}
-        color="#cfa064"
-        position={[0, 1, -6]}
-        rotation={[0, 0, 0]}
-        scale={[12, 4, 1]}
-      />
-    </Environment>
+    </>
   );
 };

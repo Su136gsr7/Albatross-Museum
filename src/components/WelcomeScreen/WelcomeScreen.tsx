@@ -160,7 +160,7 @@ export const WelcomeScreen: React.FC = () => {
 
   return (
     <div className="relative h-screen w-screen overflow-hidden bg-[#120d0a]">
-      <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 3.0, 14.8], fov: 44 }}>
+      <Canvas dpr={[1, 1.25]} gl={{ antialias: true, powerPreference: 'high-performance' }} camera={{ position: [0, 3.0, 14.8], fov: 44 }}>
         <MuseumExteriorScene doorsOpen={entering} />
       </Canvas>
 

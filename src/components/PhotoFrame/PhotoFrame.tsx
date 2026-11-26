@@ -10,9 +10,9 @@ interface PhotoFrameProps {
 }
 
 const FRAME_COLORS: Record<PlacedPhotoFrame['frameStyle'], { outer: string; metalness: number; roughness: number }> = {
-  walnut: { outer: '#3a2318', metalness: 0.12, roughness: 0.48 },
-  gold: { outer: '#cfa458', metalness: 0.82, roughness: 0.28 },
-  champagne: { outer: '#b89a67', metalness: 0.65, roughness: 0.36 },
+  walnut: { outer: '#5b3927', metalness: 0.10, roughness: 0.52 },
+  gold: { outer: '#cfa458', metalness: 0.72, roughness: 0.30 },
+  champagne: { outer: '#b89a67', metalness: 0.55, roughness: 0.38 },
 };
 
 export const PhotoFrame: React.FC<PhotoFrameProps> = ({ frame }) => {
@@ -71,7 +71,7 @@ export const PhotoFrame: React.FC<PhotoFrameProps> = ({ frame }) => {
       }}
     >
       {/* Outer Museum Molding Frame */}
-      <mesh position={[0, 0, 0.03]} castShadow receiveShadow>
+      <mesh position={[0, 0, 0.03]}>
         <boxGeometry args={[outerWidth, outerHeight, 0.06]} />
         <meshStandardMaterial
           color={style.outer}

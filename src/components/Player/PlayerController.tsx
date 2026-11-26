@@ -49,6 +49,8 @@ export const PlayerController: React.FC<PlayerControllerProps> = ({
   const lastMouseRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const camPosSmooth = useRef<THREE.Vector3>(new THREE.Vector3(0, 2.2, 17));
   const camLookSmooth = useRef<THREE.Vector3>(new THREE.Vector3(0, 1.4, 12));
+  const desiredCamScratch = useRef<THREE.Vector3>(new THREE.Vector3());
+  const desiredLookScratch = useRef<THREE.Vector3>(new THREE.Vector3());
 
   const placedFrames = useMemo(
     () => buildPlacedFrames(galleries, photos, foreverUs.centerpiecePhotoId),
@@ -237,14 +239,14 @@ export const PlayerController: React.FC<PlayerControllerProps> = ({
 
     // Prevent camera from clipping through outer walls
     const [safeCamX, safeCamZ] = resolvePlayerCollision(desiredCamX, desiredCamZ, 0.28, secretDoorOpen);
-    const desiredCamPos = new THREE.Vector3(safeCamX, Math.max(0.85, camHeight), safeCamZ);
+    desiredCamScratch.current.set(safeCamX, Math.max(0.85, camHeight), safeCamZ);
 
     const lookAheadX = pos.x - sinY * 2.2 + cosY * (shoulderOffset * 0.35);
     const lookAheadZ = pos.z - cosY * 2.2 - sinY * (shoulderOffset * 0.35);
-    const desiredLook = new THREE.Vector3(lookAheadX, 1.38 - Math.sin(pitchRef.current) * 1.1, lookAheadZ);
+    desiredLookScratch.current.set(lookAheadX, 1.38 - Math.sin(pitchRef.current) * 1.1, lookAheadZ);
 
-    camPosSmooth.current.lerp(desiredCamPos, Math.min(1, dt * 11));
-    camLookSmooth.current.lerp(desiredLook, Math.min(1, dt * 13));
+    camPosSmooth.current.lerp(desiredCamScratch.current, Math.min(1, dt * 11));
+    camLookSmooth.current.lerp(desiredLookScratch.current, Math.min(1, dt * 13));
     camera.position.copy(camPosSmooth.current);
     camera.lookAt(camLookSmooth.current);
 
@@ -258,7 +260,15 @@ export const PlayerController: React.FC<PlayerControllerProps> = ({
     <group ref={playerGroupRef} position={[0, 0, 13.5]} rotation={[0, Math.PI, 0]}>
       <CharacterModel characterId="MUNNA" animation={animState} position={[-0.265, 0, 0]} syncClockRef={syncClockRef} />
       <CharacterModel characterId="AZHAGI" animation={animState} position={[0.265, 0, 0]} syncClockRef={syncClockRef} />
-      <pointLight position={[0, 0.9, 0.15]} intensity={0.45} distance={1.8} color="#ffd4b8" />
+      {/* Lightweight soft contact shadow under each character (zero shadow-map GPU pass) */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-0.265, 0.012, 0]}>
+        <circleGeometry args={[0.26, 16]} />
+        <meshBasicMaterial color="#1a120d" transparent opacity={0.26} />
+      </mesh>
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0.265, 0.012, 0]}>
+        <circleGeometry args={[0.24, 16]} />
+        <meshBasicMaterial color="#1a120d" transparent opacity={0.26} />
+      </mesh>
     </group>
   );
 };

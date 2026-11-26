@@ -38,10 +38,10 @@ export const CharacterIntroduction: React.FC = () => {
 
   return (
     <div className="relative h-screen w-screen overflow-hidden bg-[#140f0c]">
-      <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 1.28, 2.75], fov: 40 }}>
+      <Canvas dpr={[1, 1.25]} gl={{ antialias: true, powerPreference: 'high-performance' }} camera={{ position: [0, 1.28, 2.75], fov: 40 }}>
         <color attach="background" args={['#140f0c']} />
-        <ambientLight intensity={0.75} color="#ffe7c7" />
-        <spotLight position={[1.5, 3.8, 2.8]} intensity={32} angle={0.5} penumbra={0.7} color="#ffe0ac" castShadow />
+        <ambientLight intensity={0.8} color="#ffe7c7" />
+        <directionalLight position={[1.5, 3.8, 2.8]} intensity={1.1} color="#ffe0ac" />
         <Suspense fallback={null}>
           <MuseumEnvironment intensity={0.5} />
           <CoupleIntroStage />

@@ -9,8 +9,8 @@ export const MobileControls: React.FC = () => {
   const setMobileMove = useGameStore((s) => s.setMobileMove);
   const addMobileLookDelta = useGameStore((s) => s.addMobileLookDelta);
 
-  const [knob, setKnob] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [isTouchDevice, setIsTouchDevice] = useState(false);
+  const knobRef = useRef<HTMLDivElement | null>(null);
   const joyOriginRef = useRef<{ id: number; x: number; y: number } | null>(null);
   const lookTouchRef = useRef<{ id: number; x: number; y: number } | null>(null);
 
@@ -26,11 +26,17 @@ export const MobileControls: React.FC = () => {
 
   if (stage !== 'MUSEUM' || !isTouchDevice) return null;
 
-  const maxRadius = 42;
+  const maxRadius = 36;
+
+  const updateKnobVisual = (kx: number, ky: number) => {
+    if (knobRef.current) {
+      knobRef.current.style.transform = `translate(${kx}px, ${ky}px)`;
+    }
+  };
 
   const resetJoy = () => {
     joyOriginRef.current = null;
-    setKnob({ x: 0, y: 0 });
+    updateKnobVisual(0, 0);
     setMobileMove(0, 0);
   };
 
@@ -38,7 +44,7 @@ export const MobileControls: React.FC = () => {
     <div className="pointer-events-none fixed inset-0 z-20">
       {/* Left Virtual Joystick */}
       <div
-        className="pointer-events-auto absolute bottom-7 left-6 flex h-28 w-28 touch-none items-center justify-center rounded-full border border-[#d4af6a]/45 bg-[#17110d]/60 backdrop-blur-md"
+        className="pointer-events-auto absolute bottom-5 left-4 flex h-24 w-24 touch-none items-center justify-center rounded-full border border-[#d4af6a]/45 bg-[#17110d]/55 backdrop-blur-md"
         onTouchStart={(e) => {
           const t = e.changedTouches[0];
           const rect = e.currentTarget.getBoundingClientRect();
@@ -53,7 +59,7 @@ export const MobileControls: React.FC = () => {
           const ang = Math.atan2(dy, dx);
           const kx = Math.cos(ang) * dist;
           const ky = Math.sin(ang) * dist;
-          setKnob({ x: kx, y: ky });
+          updateKnobVisual(kx, ky);
           setMobileMove(kx / maxRadius, -ky / maxRadius);
         }}
         onTouchMove={(e) => {
@@ -67,7 +73,7 @@ export const MobileControls: React.FC = () => {
               const ang = Math.atan2(dy, dx);
               const kx = Math.cos(ang) * dist;
               const ky = Math.sin(ang) * dist;
-              setKnob({ x: kx, y: ky });
+              updateKnobVisual(kx, ky);
               setMobileMove(kx / maxRadius, -ky / maxRadius);
             }
           }
@@ -76,8 +82,8 @@ export const MobileControls: React.FC = () => {
         onTouchCancel={resetJoy}
       >
         <div
-          className="h-11 w-11 rounded-full border border-[#f5d590] bg-[#d4af6a]/75 shadow-lg"
-          style={{ transform: `translate(${knob.x}px, ${knob.y}px)` }}
+          ref={knobRef}
+          className="h-10 w-10 rounded-full border border-[#f5d590] bg-[#d4af6a]/80 shadow-lg"
         />
       </div>
 

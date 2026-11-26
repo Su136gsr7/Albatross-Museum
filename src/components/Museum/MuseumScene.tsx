@@ -76,9 +76,9 @@ export const MuseumScene: React.FC = () => {
   return (
     <div className="relative h-screen w-screen overflow-hidden bg-[#140f0c] select-none">
       <Canvas
-        shadows
-        dpr={[1, 1.75]}
-        camera={{ position: [0, 2.2, 17], fov: 50, near: 0.1, far: 140 }}
+        dpr={[1, 1.25]}
+        gl={{ antialias: true, powerPreference: 'high-performance' }}
+        camera={{ position: [0, 2.2, 17], fov: 50, near: 0.1, far: 120 }}
         onCreated={({ gl }) => {
           canvasDomRef.current = gl.domElement;
         }}

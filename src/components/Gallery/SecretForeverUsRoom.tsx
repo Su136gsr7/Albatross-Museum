@@ -99,25 +99,25 @@ export const SecretForeverUsRoom: React.FC<SecretRoomProps> = ({
 
         {/* Left Door Leaf */}
         <group ref={leftDoorRef} position={[-1.75, 0, 0]}>
-          <mesh position={[0.87, 1.72, 0]} castShadow receiveShadow>
+          <mesh position={[0.87, 1.72, 0]}>
             <boxGeometry args={[1.72, 3.44, 0.16]} />
-            <meshStandardMaterial color="#25160f" roughness={0.42} />
+            <meshStandardMaterial color="#382217" roughness={0.45} />
           </mesh>
           <mesh position={[0.87, 1.72, 0.09]}>
             <boxGeometry args={[1.35, 2.9, 0.03]} />
-            <meshStandardMaterial color="#d4af6a" metalness={0.85} roughness={0.24} wireframe />
+            <meshStandardMaterial color="#d4af6a" metalness={0.75} roughness={0.28} wireframe />
           </mesh>
         </group>
 
         {/* Right Door Leaf */}
         <group ref={rightDoorRef} position={[1.75, 0, 0]}>
-          <mesh position={[-0.87, 1.72, 0]} castShadow receiveShadow>
+          <mesh position={[-0.87, 1.72, 0]}>
             <boxGeometry args={[1.72, 3.44, 0.16]} />
-            <meshStandardMaterial color="#25160f" roughness={0.42} />
+            <meshStandardMaterial color="#382217" roughness={0.45} />
           </mesh>
           <mesh position={[-0.87, 1.72, 0.09]}>
             <boxGeometry args={[1.35, 2.9, 0.03]} />
-            <meshStandardMaterial color="#d4af6a" metalness={0.85} roughness={0.24} wireframe />
+            <meshStandardMaterial color="#d4af6a" metalness={0.75} roughness={0.28} wireframe />
           </mesh>
         </group>
       </group>
@@ -125,29 +125,25 @@ export const SecretForeverUsRoom: React.FC<SecretRoomProps> = ({
       {/* Secret Room Interior @ (0, 0, -64) */}
       <group position={[0, 0, -64]}>
         {/* Rich Warm Dark-Marble Floor */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 0]} receiveShadow>
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 0]}>
           <planeGeometry args={[18, 18]} />
-          <meshStandardMaterial color="#211611" roughness={0.22} metalness={0.25} />
+          <meshStandardMaterial color="#2a1b14" roughness={0.32} metalness={0.15} />
         </mesh>
 
         {/* Golden Radial Floor Medallion */}
         <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.018, 0]}>
-          <ringGeometry args={[2.5, 2.7, 48]} />
-          <meshStandardMaterial color="#d4af6a" metalness={0.85} roughness={0.25} />
+          <ringGeometry args={[2.5, 2.7, 40]} />
+          <meshStandardMaterial color="#d4af6a" metalness={0.75} roughness={0.28} emissive="#7a5b28" emissiveIntensity={0.25} />
         </mesh>
-
-        {/* Warm Sanctuary Lighting */}
-        <pointLight position={[0, 4.2, 2.2]} intensity={35} distance={22} color="#ffd38d" />
-        <pointLight position={[0, 3.8, -3.5]} intensity={28} distance={20} color="#ffc978" />
 
         {/* Central Elevated Dais */}
-        <mesh position={[0, 0.18, 0]} receiveShadow castShadow>
-          <cylinderGeometry args={[1.45, 1.65, 0.36, 40]} />
-          <meshStandardMaterial color="#332118" roughness={0.35} />
+        <mesh position={[0, 0.18, 0]}>
+          <cylinderGeometry args={[1.45, 1.65, 0.36, 32]} />
+          <meshStandardMaterial color="#3d271c" roughness={0.40} />
         </mesh>
         <mesh position={[0, 0.37, 0]} rotation={[Math.PI / 2, 0, 0]}>
-          <torusGeometry args={[1.42, 0.035, 12, 48]} />
-          <meshStandardMaterial color="#f0c878" metalness={0.88} roughness={0.22} />
+          <torusGeometry args={[1.42, 0.035, 10, 40]} />
+          <meshStandardMaterial color="#f0c878" metalness={0.78} roughness={0.25} />
         </mesh>
 
         {/* Grand Centerpiece Frame */}
@@ -169,12 +165,12 @@ export const SecretForeverUsRoom: React.FC<SecretRoomProps> = ({
             }}
           >
             {/* Support Plinth */}
-            <mesh position={[0, -0.75, 0]} castShadow>
+            <mesh position={[0, -0.75, 0]}>
               <boxGeometry args={[dims.artWidth + 0.5, 1.1, 0.35]} />
               <meshStandardMaterial color="#281a13" roughness={0.42} />
             </mesh>
             {/* Outer Gold Frame */}
-            <mesh castShadow>
+            <mesh>
               <boxGeometry args={[dims.artWidth + 0.36, dims.artHeight + 0.36, 0.12]} />
               <meshStandardMaterial
                 color="#d8af62"
@@ -243,7 +239,7 @@ export const SecretForeverUsRoom: React.FC<SecretRoomProps> = ({
           </Text>
         </group>
 
-        <Sparkles count={140} scale={[15, 4.2, 15]} position={[0, 2.3, 0]} size={2.6} speed={0.25} color="#ffd78c" />
+        <Sparkles count={45} scale={[14, 4.0, 14]} position={[0, 2.3, 0]} size={2.4} speed={0.22} color="#ffd78c" />
       </group>
     </group>
   );
