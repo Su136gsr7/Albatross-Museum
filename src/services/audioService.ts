@@ -11,6 +11,21 @@ class MuseumAudioService {
   private musicEnabled = true;
   private lastFootstepAt = 0;
 
+  constructor() {
+    if (typeof document !== 'undefined') {
+      document.addEventListener('visibilitychange', () => {
+        if (!this.ctx) return;
+        if (document.hidden) {
+          if (this.ctx.state === 'running') {
+            void this.ctx.suspend();
+          }
+        } else if (this.musicEnabled && this.musicPlaying && this.ctx.state === 'suspended') {
+          void this.ctx.resume();
+        }
+      });
+    }
+  }
+
   private ensureContext(): AudioContext | null {
     if (typeof window === 'undefined') return null;
     if (!this.ctx) {

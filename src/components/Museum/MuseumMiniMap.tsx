@@ -27,7 +27,9 @@ export const MuseumMiniMap: React.FC<MuseumMiniMapProps> = ({
   currentGalleryId,
   onJumpToGallery,
 }) => {
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(() =>
+    typeof window !== 'undefined' ? window.innerWidth < 768 : false
+  );
   const [pos, setPos] = useState({ x: 0, z: 13.5 });
 
   useEffect(() => {
@@ -46,7 +48,7 @@ export const MuseumMiniMap: React.FC<MuseumMiniMapProps> = ({
     return (
       <button
         onClick={() => setCollapsed(false)}
-        className="pointer-events-auto fixed bottom-4 right-4 z-20 hidden items-center gap-1.5 rounded-full border border-[#d4af6a]/45 bg-[#17110d]/85 px-3.5 py-2 text-xs text-[#f5efe6] shadow-lg backdrop-blur-md hover:border-[#d4af6a] md:inline-flex"
+        className="pointer-events-auto fixed bottom-5 right-4 z-20 inline-flex items-center gap-1.5 rounded-full border border-[#d4af6a]/45 bg-[#17110d]/85 px-3.5 py-2 text-xs text-[#f5efe6] shadow-lg backdrop-blur-md hover:border-[#d4af6a]"
       >
         <MapIcon className="h-3.5 w-3.5 text-[#d4af6a]" />
         <span>Map</span>
@@ -55,7 +57,7 @@ export const MuseumMiniMap: React.FC<MuseumMiniMapProps> = ({
   }
 
   return (
-    <div className="pointer-events-auto fixed bottom-4 right-4 z-20 hidden w-48 overflow-hidden rounded-2xl border border-[#d4af6a]/35 bg-[#140e0b]/88 p-2.5 shadow-2xl backdrop-blur-md md:block">
+    <div className="pointer-events-auto fixed bottom-4 right-4 z-20 w-44 overflow-hidden rounded-2xl border border-[#d4af6a]/35 bg-[#140e0b]/90 p-2.5 shadow-2xl backdrop-blur-md sm:w-48">
       <div className="mb-1.5 flex items-center justify-between px-1">
         <span className="text-[9px] font-semibold uppercase tracking-[0.22em] text-[#d4af6a]">
           Museum Floorplan

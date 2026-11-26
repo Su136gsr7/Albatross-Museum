@@ -39,14 +39,29 @@ export const backupService = {
     };
   },
 
-  downloadBackupJson(payload: MuseumBackupPayload) {
-    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  async downloadBackupJson(payload: MuseumBackupPayload) {
+    const jsonText = JSON.stringify(payload, null, 2);
+    const fileName = `our-little-universe-backup-${new Date().toISOString().slice(0, 10)}.json`;
+    const blob = new Blob([jsonText], { type: 'application/json' });
+
+    if (typeof navigator !== 'undefined' && typeof navigator.share === 'function') {
+      try {
+        const shareFile = new File([blob], fileName, { type: 'application/json' });
+        if (!navigator.canShare || navigator.canShare({ files: [shareFile] })) {
+          await navigator.share({ title: 'Our Little Universe Backup', files: [shareFile] });
+          return;
+        }
+      } catch (err) {
+        if ((err as Error)?.name === 'AbortError') return;
+      }
+    }
+
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `our-little-universe-backup-${new Date().toISOString().slice(0, 10)}.json`;
+    a.download = fileName;
     a.click();
-    URL.revokeObjectURL(url);
+    window.setTimeout(() => URL.revokeObjectURL(url), 1500);
   },
 
   parseBackupPayload(rawJson: string): {

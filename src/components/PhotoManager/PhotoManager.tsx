@@ -196,8 +196,8 @@ export const PhotoManager: React.FC = () => {
   const handleExportBackup = async () => {
     setBusyMessage('Creating encrypted-local JSON backup...');
     const payload = await backupService.createBackup(photos, galleries, foreverUs);
-    backupService.downloadBackupJson(payload);
-    setBusyMessage('Backup JSON downloaded.');
+    await backupService.downloadBackupJson(payload);
+    setBusyMessage('Backup JSON ready.');
   };
 
   const handleRestoreBackup = async (file: File) => {

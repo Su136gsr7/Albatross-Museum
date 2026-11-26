@@ -114,11 +114,11 @@ export const MobileControls: React.FC = () => {
         }}
       />
 
-      {/* Mobile Tap-to-Interact Memory Button */}
+      {/* Mobile Tap-to-Interact Memory Button (positioned above Map toggle) */}
       {nearbyPhotoId && (
         <button
           onClick={() => openMemoryViewer(nearbyPhotoId)}
-          className="pointer-events-auto absolute bottom-10 right-6 flex items-center gap-2 rounded-full border border-[#d4af6a] bg-[#d4af6a] px-5 py-3 text-xs font-bold uppercase tracking-wider text-[#1a120d] shadow-xl"
+          className="pointer-events-auto absolute bottom-16 right-4 flex items-center gap-2 rounded-full border border-[#d4af6a] bg-[#d4af6a] px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-[#1a120d] shadow-xl"
         >
           <Eye className="h-4 w-4" />
           Explore Memory

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Calendar, ChevronLeft, ChevronRight, Edit3, MapPin, X } from 'lucide-react';
 import { useGameStore } from '../../store/gameStore';
 
@@ -10,6 +10,7 @@ export const MemoryViewer: React.FC = () => {
   const closeMemoryViewer = useGameStore((s) => s.closeMemoryViewer);
   const stepMemoryPhoto = useGameStore((s) => s.stepMemoryPhoto);
   const setPhotoManagerOpen = useGameStore((s) => s.setPhotoManagerOpen);
+  const swipeStartRef = useRef<{ x: number; y: number } | null>(null);
 
   useEffect(() => {
     if (stage !== 'MEMORY_VIEWER') return;
@@ -69,7 +70,23 @@ export const MemoryViewer: React.FC = () => {
       </div>
 
       {/* Main Photo Canvas + Metadata */}
-      <div className="relative flex flex-1 flex-col items-center justify-center gap-5 overflow-y-auto px-4 py-5 lg:flex-row lg:gap-10 lg:px-12">
+      <div
+        className="relative flex flex-1 flex-col items-center justify-center gap-5 overflow-y-auto px-4 py-5 lg:flex-row lg:gap-10 lg:px-12"
+        onTouchStart={(e) => {
+          const t = e.changedTouches[0];
+          swipeStartRef.current = { x: t.clientX, y: t.clientY };
+        }}
+        onTouchEnd={(e) => {
+          if (!swipeStartRef.current) return;
+          const t = e.changedTouches[0];
+          const dx = t.clientX - swipeStartRef.current.x;
+          const dy = t.clientY - swipeStartRef.current.y;
+          swipeStartRef.current = null;
+          if (Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy) * 1.2) {
+            stepMemoryPhoto(dx < 0 ? 1 : -1);
+          }
+        }}
+      >
         <button
           onClick={() => stepMemoryPhoto(-1)}
           aria-label="Previous photograph"
