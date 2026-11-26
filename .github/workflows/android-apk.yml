@@ -25,9 +25,6 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-
       - name: Install dependencies
         run: npm ci
 
@@ -36,11 +33,15 @@ jobs:
           npm run build
           npx cap sync android
 
-      - name: Build Debug APK
+      - name: Accept Android SDK licenses & Build Debug APK
         working-directory: android
         run: |
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          if [ -n "$ANDROID_HOME" ] && [ -x "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" ]; then
+            yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses >/dev/null 2>&1 || true
+          fi
           chmod +x gradlew
-          ./gradlew assembleDebug
+          ./gradlew assembleDebug --no-daemon
 
       - name: Upload Our Little Universe APK
         uses: actions/upload-artifact@v4
