@@ -3,7 +3,9 @@ export type GameStage =
   | 'CHARACTER_SELECT'
   | 'CHARACTER_INTRO'
   | 'MUSEUM'
-  | 'MEMORY_VIEWER';
+  | 'MEMORY_VIEWER'
+  | 'ALBATROSS_ROOM'
+  | 'ALBATROSS_FLIGHT';
 
 export interface ForeverUsConfig {
   heading: string;

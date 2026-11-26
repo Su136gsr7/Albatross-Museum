@@ -35,6 +35,8 @@ export const PlayerController: React.FC<PlayerControllerProps> = ({
   const setCurrentGalleryId = useGameStore((s) => s.setCurrentGalleryId);
   const setNearbyPhotoId = useGameStore((s) => s.setNearbyPhotoId);
   const openMemoryViewer = useGameStore((s) => s.openMemoryViewer);
+  const setNearAlbatrossPortal = useGameStore((s) => s.setNearAlbatrossPortal);
+  const openAlbatrossRoom = useGameStore((s) => s.openAlbatrossRoom);
   const setPointerLocked = useGameStore((s) => s.setPointerLocked);
   const consumeMobileLookDelta = useGameStore((s) => s.consumeMobileLookDelta);
 
@@ -77,9 +79,11 @@ export const PlayerController: React.FC<PlayerControllerProps> = ({
       const code = e.code;
       keysRef.current[code] = true;
       if (code === 'KeyE' && !useGameStore.getState().isPhotoManagerOpen && useGameStore.getState().stage === 'MUSEUM') {
-        const nearby = useGameStore.getState().nearbyPhotoId;
-        if (nearby) {
-          openMemoryViewer(nearby);
+        const st = useGameStore.getState();
+        if (st.nearAlbatrossPortal) {
+          openAlbatrossRoom();
+        } else if (st.nearbyPhotoId) {
+          openMemoryViewer(st.nearbyPhotoId);
         }
       }
     };
@@ -218,9 +222,13 @@ export const PlayerController: React.FC<PlayerControllerProps> = ({
         bestId = f.photo.id;
       }
     }
+    // Check behind Secret Room centerpiece for the Albatross North Wall Portal (Z in [-73..-66.2])
+    const isNearPortal = pos.z < -66.2 && pos.z >= -73.0 && Math.abs(pos.x) < 4.5;
+    setNearAlbatrossPortal(isNearPortal);
+
     // Check Secret Room centerpiece at (0, 0, -64)
     const dCenter = Math.hypot(pos.x - 0, pos.z - -64);
-    if (dCenter < 3.4 && dCenter < bestDist) {
+    if (!isNearPortal && dCenter < 3.4 && dCenter < bestDist) {
       bestId = foreverUs.centerpiecePhotoId;
     }
     if (useGameStore.getState().nearbyPhotoId !== bestId) {

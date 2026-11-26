@@ -146,6 +146,7 @@ function MuseumExteriorScene({ doorsOpen }: { doorsOpen: boolean }) {
 
 export const WelcomeScreen: React.FC = () => {
   const setStage = useGameStore((s) => s.setStage);
+  const albatrossUnlocked = useGameStore((s) => s.albatrossUnlocked);
   const [entering, setEntering] = useState(false);
 
   const handleEnter = () => {
@@ -187,6 +188,11 @@ export const WelcomeScreen: React.FC = () => {
           <p className="max-w-xl font-serif text-lg italic tracking-wide text-[#e5d4bc] sm:text-2xl">
             “Every picture holds a memory. Every memory holds us.”
           </p>
+          {albatrossUnlocked && (
+            <span className="mt-1 rounded-full border border-[#f2cb85]/60 bg-[#2d1c14]/85 px-4 py-1 text-[11px] font-semibold tracking-[0.24em] text-[#f7da97] shadow-[0_0_20px_rgba(242,203,133,0.3)] backdrop-blur-md">
+              ∞ ETERNAL ALBATROSS UNLOCKED · MUNNA &amp; AZHAGI ∞
+            </span>
+          )}
         </div>
 
         <div className="mb-8 flex flex-col items-center gap-4">

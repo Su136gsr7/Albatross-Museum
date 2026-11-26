@@ -29,6 +29,8 @@ interface GameStoreState {
   discoveredPhotoIds: string[];
   secretRoomUnlocked: boolean;
   secretRoomEntered: boolean;
+  nearAlbatrossPortal: boolean;
+  albatrossUnlocked: boolean;
   isPhotoManagerOpen: boolean;
   managerFocusPhotoId: string | null;
   isPointerLocked: boolean;
@@ -57,6 +59,10 @@ interface GameStoreState {
   addMobileLookDelta: (dx: number, dy: number) => void;
   consumeMobileLookDelta: () => { dx: number; dy: number };
   enterSecretRoom: () => void;
+  setNearAlbatrossPortal: (near: boolean) => void;
+  openAlbatrossRoom: () => void;
+  startAlbatrossFlight: () => void;
+  returnToInitialStage: () => void;
 
   // Photo & gallery management mutations (persisted to IndexedDB)
   addPhotos: (newPhotos: PhotoRecord[]) => Promise<void>;
@@ -85,6 +91,8 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   discoveredPhotoIds: [],
   secretRoomUnlocked: true,
   secretRoomEntered: false,
+  nearAlbatrossPortal: false,
+  albatrossUnlocked: false,
   isPhotoManagerOpen: false,
   managerFocusPhotoId: null,
   isPointerLocked: false,
@@ -254,6 +262,47 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       audioService.playRoomTransition();
       set({ secretRoomEntered: true });
     }
+  },
+
+  setNearAlbatrossPortal: (nearAlbatrossPortal) => {
+    if (get().nearAlbatrossPortal !== nearAlbatrossPortal) {
+      set({ nearAlbatrossPortal });
+    }
+  },
+
+  openAlbatrossRoom: () => {
+    audioService.playRoomTransition();
+    if (document.pointerLockElement) {
+      document.exitPointerLock();
+    }
+    set({
+      stage: 'ALBATROSS_ROOM',
+      isPointerLocked: false,
+      nearAlbatrossPortal: false,
+      nearbyPhotoId: null,
+      activePhotoId: null,
+    });
+  },
+
+  startAlbatrossFlight: () => {
+    audioService.playAlbatrossTransform();
+    set({ stage: 'ALBATROSS_FLIGHT', albatrossUnlocked: true });
+  },
+
+  returnToInitialStage: () => {
+    if (document.pointerLockElement) {
+      document.exitPointerLock();
+    }
+    set({
+      stage: 'WELCOME',
+      currentGalleryId: 'atrium',
+      nearbyPhotoId: null,
+      activePhotoId: null,
+      nearAlbatrossPortal: false,
+      isPointerLocked: false,
+      isPhotoManagerOpen: false,
+      albatrossUnlocked: true,
+    });
   },
 
   addPhotos: async (newPhotos) => {

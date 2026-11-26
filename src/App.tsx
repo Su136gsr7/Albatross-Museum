@@ -3,6 +3,7 @@ import { useGameStore } from './store/gameStore';
 import { WelcomeScreen } from './components/WelcomeScreen/WelcomeScreen';
 import { CharacterIntroduction } from './components/CharacterPreview/CharacterIntroduction';
 import { MuseumScene } from './components/Museum/MuseumScene';
+import { AlbatrossSanctuary } from './components/Albatross/AlbatrossSanctuary';
 
 export function App() {
   const stage = useGameStore((s) => s.stage);
@@ -26,6 +27,7 @@ export function App() {
 
   if (stage === 'WELCOME') return <WelcomeScreen />;
   if (stage === 'CHARACTER_INTRO' || stage === 'CHARACTER_SELECT') return <CharacterIntroduction />;
+  if (stage === 'ALBATROSS_ROOM' || stage === 'ALBATROSS_FLIGHT') return <AlbatrossSanctuary />;
   return <MuseumScene />;
 }
 

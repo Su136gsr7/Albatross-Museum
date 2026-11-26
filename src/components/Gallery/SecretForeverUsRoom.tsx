@@ -20,11 +20,14 @@ export const SecretForeverUsRoom: React.FC<SecretRoomProps> = ({
   const foreverUs = useGameStore((s) => s.foreverUs);
   const openMemoryViewer = useGameStore((s) => s.openMemoryViewer);
   const enterSecretRoom = useGameStore((s) => s.enterSecretRoom);
+  const openAlbatrossRoom = useGameStore((s) => s.openAlbatrossRoom);
+  const nearAlbatrossPortal = useGameStore((s) => s.nearAlbatrossPortal);
 
   const leftDoorRef = useRef<THREE.Group>(null);
   const rightDoorRef = useRef<THREE.Group>(null);
   const [doorOpen, setDoorOpen] = useState(false);
   const [hovered, setHovered] = useState(false);
+  const [portalHover, setPortalHover] = useState(false);
   const [centerTex, setCenterTex] = useState<THREE.Texture | null>(null);
 
   const centerpiece =
@@ -205,19 +208,19 @@ export const SecretForeverUsRoom: React.FC<SecretRoomProps> = ({
           </group>
         )}
 
-        {/* Personal Dedication Wall Plaque on North Wall */}
-        <group position={[0, 2.35, -8.72]}>
+        {/* Personal Dedication Wall Plaque on North Wall (upper section) */}
+        <group position={[0, 3.05, -8.72]}>
           <mesh>
-            <boxGeometry args={[6.4, 2.4, 0.08]} />
+            <boxGeometry args={[6.4, 1.85, 0.08]} />
             <meshStandardMaterial color="#1a110d" roughness={0.5} />
           </mesh>
           <mesh position={[0, 0, 0.045]}>
-            <boxGeometry args={[6.15, 2.15, 0.02]} />
-            <meshStandardMaterial color="#d4af6a" metalness={0.8} roughness={0.28} wireframe />
+            <boxGeometry args={[6.15, 1.65, 0.02]} />
+            <meshStandardMaterial color="#d4af6a" metalness={0.75} roughness={0.28} wireframe />
           </mesh>
           <Text
-            position={[0, 0.65, 0.06]}
-            fontSize={0.28}
+            position={[0, 0.48, 0.06]}
+            fontSize={0.26}
             color="#f5d590"
             anchorX="center"
             anchorY="middle"
@@ -226,16 +229,87 @@ export const SecretForeverUsRoom: React.FC<SecretRoomProps> = ({
             {foreverUs.heading}
           </Text>
           <Text
-            position={[0, -0.15, 0.06]}
-            fontSize={0.145}
+            position={[0, -0.18, 0.06]}
+            fontSize={0.14}
             maxWidth={5.4}
             textAlign="center"
-            lineHeight={1.45}
+            lineHeight={1.4}
             color="#f2e6d5"
             anchorX="center"
             anchorY="middle"
           >
             {foreverUs.message}
+          </Text>
+        </group>
+
+        {/* Interactive Albatross Trial Portal behind Centerpiece Image on North Wall */}
+        <group
+          position={[0, 1.05, -8.66]}
+          onClick={(e) => {
+            e.stopPropagation();
+            openAlbatrossRoom();
+          }}
+          onPointerOver={(e) => {
+            e.stopPropagation();
+            setPortalHover(true);
+            document.body.style.cursor = 'pointer';
+          }}
+          onPointerOut={() => {
+            setPortalHover(false);
+            document.body.style.cursor = 'auto';
+          }}
+        >
+          <mesh>
+            <boxGeometry args={[3.9, 1.65, 0.10]} />
+            <meshStandardMaterial
+              color="#2b1b14"
+              emissive={nearAlbatrossPortal || portalHover ? '#d4af6a' : '#63431e'}
+              emissiveIntensity={nearAlbatrossPortal || portalHover ? 0.55 : 0.20}
+              roughness={0.35}
+            />
+          </mesh>
+          <mesh position={[0, 0, 0.06]}>
+            <boxGeometry args={[3.68, 1.44, 0.02]} />
+            <meshStandardMaterial
+              color="#f2cb85"
+              metalness={0.75}
+              roughness={0.22}
+              emissive="#ffd788"
+              emissiveIntensity={nearAlbatrossPortal || portalHover ? 0.9 : 0.35}
+              wireframe
+            />
+          </mesh>
+          <Text
+            position={[0, 0.34, 0.08]}
+            fontSize={0.14}
+            color="#ffd995"
+            anchorX="center"
+            anchorY="middle"
+            letterSpacing={0.16}
+          >
+            ∞ SECRET ALBATROSS TRIAL ∞
+          </Text>
+          <Text
+            position={[0, -0.04, 0.08]}
+            fontSize={0.13}
+            maxWidth={3.3}
+            textAlign="center"
+            lineHeight={1.35}
+            color="#fff3df"
+            anchorX="center"
+            anchorY="middle"
+          >
+            Answer correctly to get your Albatross with Infinite Love
+          </Text>
+          <Text
+            position={[0, -0.48, 0.08]}
+            fontSize={0.11}
+            color="#f5d590"
+            anchorX="center"
+            anchorY="middle"
+            letterSpacing={0.12}
+          >
+            [ CLICK / TAP OR PRESS E TO ENTER ]
           </Text>
         </group>
 

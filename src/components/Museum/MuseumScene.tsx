@@ -31,6 +31,8 @@ export const MuseumScene: React.FC = () => {
   const musicEnabled = useGameStore((s) => s.musicEnabled);
   const sfxEnabled = useGameStore((s) => s.sfxEnabled);
   const secretRoomEntered = useGameStore((s) => s.secretRoomEntered);
+  const nearAlbatrossPortal = useGameStore((s) => s.nearAlbatrossPortal);
+  const openAlbatrossRoom = useGameStore((s) => s.openAlbatrossRoom);
   const setPhotoManagerOpen = useGameStore((s) => s.setPhotoManagerOpen);
   const toggleMusic = useGameStore((s) => s.toggleMusic);
   const toggleSfx = useGameStore((s) => s.toggleSfx);
@@ -216,7 +218,7 @@ export const MuseumScene: React.FC = () => {
       )}
 
       {/* Secret Room Emotional Closing Banner */}
-      {currentGalleryId === 'forever-us-secret' && secretRoomEntered && !closingModalOpen && (
+      {currentGalleryId === 'forever-us-secret' && secretRoomEntered && !closingModalOpen && !nearAlbatrossPortal && (
         <div className="pointer-events-auto fixed bottom-24 left-1/2 z-20 -translate-x-1/2">
           <button
             onClick={() => setClosingModalOpen(true)}
@@ -224,6 +226,19 @@ export const MuseumScene: React.FC = () => {
           >
             <Heart className="h-4 w-4 text-[#f2cb85]" />
             Open Forever Us Reflection
+          </button>
+        </div>
+      )}
+
+      {/* Secret Wall Albatross Trial Prompt (behind centerpiece image — works on Desktop & Android) */}
+      {nearAlbatrossPortal && (
+        <div className="pointer-events-none fixed bottom-24 left-1/2 z-30 w-[92vw] max-w-md -translate-x-1/2 md:bottom-16">
+          <button
+            onClick={openAlbatrossRoom}
+            className="pointer-events-auto flex w-full items-center justify-center gap-3 rounded-full border border-[#f7da97] bg-gradient-to-r from-[#2e1b13]/95 via-[#43271a]/95 to-[#2e1b13]/95 px-5 py-3 text-center text-xs font-semibold text-[#fff1d6] shadow-[0_0_35px_rgba(242,203,133,0.45)] backdrop-blur-md transition hover:scale-105 sm:text-sm"
+          >
+            <Sparkles className="h-4 w-4 flex-shrink-0 text-[#f5d590]" />
+            <span>Click / Press E — Get your Albatross with Infinite Love</span>
           </button>
         </div>
       )}
